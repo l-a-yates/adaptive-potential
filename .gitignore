@@ -1,0 +1,33 @@
+# R / RStudio
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+open-rstudio.sh
+
+# private
+CLAUDE.md
+.claude/
+docs/
+
+# data: only the analysis file is tracked
+data/raw/
+
+# results: only the fit is tracked; the rest is regenerated
+results/*
+!results/data/
+results/data/*
+!results/data/k0.rds
+
+# empty sandbox stubs
+.bash_profile
+.bashrc
+.gitconfig
+.gitmodules
+.idea
+.mcp.json
+.profile
+.ripgreprc
+.vscode
+.zprofile
+.zshrc

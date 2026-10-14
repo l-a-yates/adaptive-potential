@@ -6,7 +6,7 @@ TREATS  <- c("T14DA", "T14DB", "T25DA", "T25DB", "T28DA", "T28DB")
 TEMP_OF <- c(T14DA = 14, T14DB = 14, T25DA = 25, T25DB = 25, T28DA = 28, T28DB = 28)
 DIET_OF <- c(T14DA = "DA", T14DB = "DB", T25DA = "DA", T25DB = "DB",
              T28DA = "DA", T28DB = "DB")
-DIET_LAB <- c(DA = "Control diet", DB = "Low-calorie diet")
+DIET_LAB <- c(DA = "Standard diet", DB = "Low-calorie diet")
 LAYDAYS <- c(T14DA = 11, T14DB = 15, T25DA = 6, T25DB = 8, T28DA = 6, T28DB = 9)
 
 MARGINS <- c(Cold = 14, Hot = 28)

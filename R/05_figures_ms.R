@@ -25,8 +25,8 @@ save_fig <- function(p, name, w, h) {
 ## Posterior mean and 90% HPD of each column of a D x 6 matrix, as in the tables.
 trt_summary <- function(M) bind_rows(lapply(TREATS, function(tt)
   cbind(temp = TEMP_OF[[tt]], diet = DIET_OF[[tt]], smry(M[, tt]))))
-TRT_LAB <- c(T14DA = "14\nctrl", T14DB = "14\nlow", T25DA = "25\nctrl",
-             T25DB = "25\nlow",  T28DA = "28\nctrl", T28DB = "28\nlow")
+TRT_LAB <- c(T14DA = "14\nstd", T14DB = "14\nlow", T25DA = "25\nstd",
+             T25DB = "25\nlow",  T28DA = "28\nstd", T28DB = "28\nlow")
 
 ## Diet by line type; the legend sits in (a) only.
 p2a <- ggplot(trt_summary(log(va$Wbar)), aes(factor(temp), mean, group = diet)) +
@@ -69,7 +69,7 @@ save_fig((p2a + p2b + p2c + plot_layout(nrow = 1)) &
 ## Standardised sire breeding values (sire_bv, saved by 02) in two treatments,
 ## sires observed in both; y label on the first panel only, r_A as subtitle.
 bv <- readRDS(FIT_PATH)$sire_bv
-env_lab <- function(tt) paste0(TEMP_OF[[tt]], "°C\n", DIET_LAB[[DIET_OF[[tt]]]])
+env_lab <- function(tt) paste0(TEMP_OF[[tt]], " °C\n", DIET_LAB[[DIET_OF[[tt]]]])
 
 panel <- function(left, right, tag, title,
                   ylab = "Sire breeding value for relative fitness (standardised)") {
@@ -107,25 +107,26 @@ save_fig(wrap_plots(p3s, nrow = 1) & scale_y_continuous(limits = ylim3), "ms_fig
 ## (a) diet effects and interactions on V_A(w), (b) margin contrasts on r_A.
 DENS_COL <- "#4C72B0"
 
-## Label each density with P(>0), just right of the density at half its height
-## (slab geometry read back from the built plot). s: the summary table, with the
+## Label each density with P(>0), just right of the density at fraction at of its
+## height (slab geometry read back from the built plot). s: the summary table, with the
 ## y factor column y and, for a faceted plot, the facet factor column facet;
 ## pad: gap to the label; min_y: lowest label height above the row.
-add_p0 <- function(p, s, y, facet = NULL, pad, min_y = 0) {
+add_p0 <- function(p, s, y, facet = NULL, pad, min_y = 0, at = 0.5) {
   pos <- layer_data(p, 2) %>% group_by(PANEL, y) %>%
     summarise(peak = max(thickness), sc = scale[1],
-              x = max(x[thickness >= peak / 2]) + pad, .groups = "drop") %>%
+              x = max(x[thickness >= peak * at]) + pad, .groups = "drop") %>%
     group_by(PANEL) %>% mutate(h = sc * peak / max(peak)) %>% ungroup() %>%   # per-panel scaling
     mutate(PANEL = as.integer(PANEL), y = as.integer(y))
   s <- mutate(s, PANEL = if (is.null(facet)) 1L else as.integer(.data[[facet]]),
               y = as.integer(.data[[y]]))
   p + geom_text(data = left_join(s, pos, by = c("PANEL", "y")),
-                aes(x, y + pmax(h / 2, min_y), label = sprintf("P(>0) = %.3f", p_gt0)),
+                aes(x, y + pmax(h * at, min_y), label = sprintf("P(>0) = %.3f", p_gt0)),
                 inherit.aes = FALSE, hjust = 0, size = 5.5 / .pt)
 }
 
 vc <- va_contrasts(d$VA_w) %>%
   mutate(quantity = sub("^(diet effect|interaction \\w+) ", "\\1\n", quantity),
+         quantity = gsub("(\\d+)C", "\\1 °C", quantity),
          quantity = factor(quantity, rev(quantity)))
 vc_sum <- summarise_draws_col(vc)
 
@@ -150,12 +151,12 @@ p4b <- ggplot(unnest(mc, draws), aes(draws, contrast)) +
   stat_slab(fill = DENS_COL, slab_alpha = 0.75, normalize = "panels", scale = 0.6) +
   geom_pointinterval(data = mc_sum, aes(x = mean, xmin = lower, xmax = upper)) +
   facet_wrap(~ margin, nrow = 1) +
-  coord_cartesian(xlim = c(-1, 2)) +
-  scale_x_continuous(breaks = c(-1, 0, 1)) +
-  labs(x = "Difference in additive genetic\ncorrelation in fitness", y = NULL) +
+  coord_cartesian(xlim = range(unlist(mc$draws)) + c(0, 0.35), expand = FALSE) +   # tight, plus room for labels
+  scale_x_continuous(breaks = seq(-0.5, 1, 0.5)) +
+  labs(x = expression("Difference in" ~ r[A]), y = NULL) +
   theme(strip.background = element_blank(), strip.text = element_text(hjust = 0.5),
         axis.text.y = element_text(hjust = 0.5))
-p4b <- add_p0(p4b, mc_sum, "contrast", facet = "margin", pad = 0.04)
+p4b <- add_p0(p4b, mc_sum, "contrast", facet = "margin", pad = 0.04, at = 0.75)
 
 save_fig(p4a + p4b + plot_layout(widths = c(1, 1)) +
            plot_annotation(tag_levels = "a", tag_prefix = "(", tag_suffix = ")") &

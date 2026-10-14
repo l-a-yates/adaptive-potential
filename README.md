@@ -9,29 +9,22 @@ Analysis code for Walter et al. A half-sib breeding design (143 sires, 688 dams,
 
 ## Running
 
-Run the scripts in order, one at a time, from the project root (or line by line in RStudio):
+Run the scripts in order, one at a time, from the project root:
 
-```
+```         
 Rscript R/01_data.R          # data checks, design tables, descriptive plots
 Rscript R/02_fit.R           # fit k0 (skipped if results/data/k0.rds exists)
-Rscript R/03_diagnostics.R   # convergence, posterior predictive checks, PSIS-LOO
+Rscript R/03_diagnostics.R   # convergence, posterior predictive checks, LOO
 Rscript R/04_results.R       # mean fitness, V_A(w), diet contrasts, r_A
 Rscript R/05_figures_ms.R    # manuscript Figs 2-4
 ```
 
-The fitted model ships as `results/data/k0.rds`, so no refitting is needed. To refit (about 20-25 minutes on four cores), move it aside first:
-
-```
-mv results/data/k0.rds results/data/k0_previous.rds
-Rscript R/02_fit.R
-```
-
-All intervals are 90% highest posterior density intervals.
+The fitted model can be found at `results/data/k0.rds` (a new fit takes about 20-25 minutes on four cores).
 
 ## Layout
 
 | path | contents |
-|---|---|
+|----|----|
 | `R/00_functions.R` | constants and helpers, sourced by every script |
 | `R/01_data.R` … `R/05_figures_ms.R` | the pipeline, run in order |
 | `stan/k0_zinb.stan` | the model |

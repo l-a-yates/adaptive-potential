@@ -1,6 +1,6 @@
 # Adaptive potential across temperature and diet in *Drosophila*
 
-Analysis code for Walter et al. A half-sib breeding design (143 sires, 688 dams, 6906 females) was assayed in six treatments: three temperatures (14, 25, 28 °C) crossed with two diets (control, low-calorie). A zero-inflated negative binomial sire model (`k0`, fitted in Stan) estimates the additive genetic variance in relative fitness, `V_A(w)`, in each treatment and the genetic correlations in fitness among treatments.
+Analysis code for Walter et al. A half-sib breeding design (143 sires, 688 dams, 6906 females) was assayed in six treatments: three temperatures (14, 25, 28 °C) crossed with two diets (standard, low-calorie). A zero-inflated negative binomial sire model (`k0`, fitted in Stan) estimates the additive genetic variance in relative fitness, `V_A(w)`, in each treatment and the genetic correlations in fitness among treatments.
 
 ## Requirements
 
@@ -25,9 +25,9 @@ The fitted model can be found at `results/data/k0.rds` (a new fit takes about 20
 
 | path | contents |
 |----|----|
-| `R/00_functions.R` | constants and helpers, sourced by every script |
+| `R/00_functions.R` | constants and helpers |
 | `R/01_data.R` … `R/05_figures_ms.R` | the pipeline, run in order |
 | `stan/k0_zinb.stan` | the model |
-| `data/Data_Productivity.csv` | the data, one row per female |
+| `data/Data_Productivity.csv`, `data/README.md` | the data and its column descriptions |
 | `results/data/k0.rds` | the fitted model |
 | `results/tables/`, `results/plots/` | created by the scripts |

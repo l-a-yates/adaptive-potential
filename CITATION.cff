@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite it as below."
+type: software
+title: "Code and data for: Interactions between thermal and nutritional stress reveal cryptic adaptive potential"
+version: 1.0.0
+authors:
+  - family-names: Walter
+    given-names: Greg M.
+    affiliation: University of Tasmania
+  - family-names: Chakraborty
+    given-names: Avishikta
+    affiliation: University College London
+  - family-names: Yates
+    given-names: Luke
+    affiliation: University of Tasmania
+  - family-names: Cockerell
+    given-names: Fiona
+    affiliation: Monash University
+  - family-names: White
+    given-names: Craig R.
+    affiliation: Monash University
+  - family-names: Sgrò
+    given-names: Carla M.
+    affiliation: Monash University
+repository-code: "https://github.com/l-a-yates/adaptive-potential"
+keywords:
+  - adaptive potential
+  - genetic variance in fitness
+  - genotype-by-environment interaction
+  - Drosophila
+  - Stan

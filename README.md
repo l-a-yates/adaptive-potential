@@ -1,5 +1,7 @@
 # Adaptive potential across temperature and diet in *Drosophila*
 
+[![DOI](https://zenodo.org/badge/1418193455.svg)](https://doi.org/10.5281/zenodo.23463229)
+
 Analysis code for Walter et al. A half-sib breeding design (143 sires, 688 dams, 6906 females) was assayed in six treatments: three temperatures (14, 25, 28 °C) crossed with two diets (standard, low-calorie). A zero-inflated negative binomial sire model (`k0`, fitted in Stan) estimates the additive genetic variance in relative fitness, `V_A(w)`, in each treatment and the genetic correlations in fitness among treatments.
 
 ## Requirements
